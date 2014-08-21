@@ -29,6 +29,20 @@ class ViewController: UIViewController {
         var defaults = NSUserDefaults.standardUserDefaults();
         var defTipPercentageIndex = defaults.integerForKey("defTipPercentageIndex");
         tipControl.selectedSegmentIndex = defTipPercentageIndex;
+        
+        //Get the current Date and calc the timeInterval since, last changed Amount
+        var possiblePastDate : AnyObject? = defaults.objectForKey("lastChangedDate");
+        var possibleBillAmount : AnyObject? = defaults.objectForKey("lastAmount");
+        var curDate = NSDate();
+        if let pastDate = possiblePastDate as? NSDate {
+            var timeSince = curDate.timeIntervalSinceDate(pastDate);
+            if let billAmount = possibleBillAmount as? Double {
+                if(timeSince < 60) {
+                    billField.text = billAmount.bridgeToObjectiveC().stringValue;
+                    onEditingChanged(billField);
+                }
+            }
+        }
     }
 
     @IBAction func onEditingChanged(sender: AnyObject) {
@@ -40,6 +54,14 @@ class ViewController: UIViewController {
         tipLabel.text = String(format: "$%.2f", tip);
         totalLabel.text = String(format: "$%.2f", amount);
         
+        //Save the NSDate, we can remember the billAmount 1 min
+        var curDate = NSDate();
+        var defaults = NSUserDefaults.standardUserDefaults();
+        defaults.setObject(curDate, forKey: "lastChangedDate");
+        
+        //Save the lastChanged billAmount
+        defaults.setObject(billAmount, forKey: "lastAmount");
+        defaults.synchronize();
     }
     @IBAction func onTap(sender: AnyObject) {
         view.endEditing(true);
