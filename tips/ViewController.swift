@@ -18,15 +18,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        tipLabel.text = "$0.00"
-        totalLabel.text = "$0.00"
-    }
+        tipLabel.text = "$0.00";
+        totalLabel.text = "$0.00";
+        
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        //get the default values for tip percentage
+        var defaults = NSUserDefaults.standardUserDefaults();
+        var defTipPercentageIndex = defaults.integerForKey("defTipPercentageIndex");
+        tipControl.selectedSegmentIndex = defTipPercentageIndex;
+    }
 
     @IBAction func onEditingChanged(sender: AnyObject) {
         var billAmount =  billField.text.bridgeToObjectiveC().doubleValue;
