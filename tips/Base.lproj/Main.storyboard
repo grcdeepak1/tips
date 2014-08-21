@@ -73,7 +73,7 @@
                                 </connections>
                             </segmentedControl>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="fuM-sq-pVc" appends="YES" id="mdB-qy-yUd"/>
@@ -162,7 +162,6 @@
         <!--Navigation Controller-->
         <scene sceneID="qhd-Xc-adM">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0Ya-gv-sJt" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uIN-gf-G5M" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qnr-Xn-xNs">
@@ -174,6 +173,7 @@
                         <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="bnL-L2-qQM"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Ya-gv-sJt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="206" y="142"/>
         </scene>

@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet var billField: UITextField!
     @IBOutlet var tipLabel: UILabel!
     @IBOutlet var totalLabel: UILabel!
+    @NSCopying var locale: NSLocale?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -51,9 +53,9 @@ class ViewController: UIViewController {
         var tipPercentage = tipPercentages[tipControl.selectedSegmentIndex];
         var tip =  billAmount*tipPercentage;
         var amount = billAmount+tip;
-        tipLabel.text = String(format: "$%.2f", tip);
-        totalLabel.text = String(format: "$%.2f", amount);
-        
+        tipLabel.text = currencyFormatter.stringFromNumber(tip);
+        totalLabel.text = currencyFormatter.stringFromNumber(amount);
+
         //Save the NSDate, we can remember the billAmount 1 min
         var curDate = NSDate();
         var defaults = NSUserDefaults.standardUserDefaults();
@@ -66,6 +68,12 @@ class ViewController: UIViewController {
     @IBAction func onTap(sender: AnyObject) {
         view.endEditing(true);
     }
-
+    
+    //Helper Functions
+    var currencyFormatter: NSNumberFormatter {
+    let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
+        return formatter
+    }
 }
 
