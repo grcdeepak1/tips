@@ -11,21 +11,35 @@ import UIKit
 class ViewController: UIViewController {
     
 
+    @IBOutlet var animatedView: UIView!
     @IBOutlet var tipControl: UISegmentedControl!
     @IBOutlet var billField: UITextField!
-    @IBOutlet var tipLabel: UILabel!
-    @IBOutlet var totalLabel: UILabel!
+    
+    @IBOutlet var anTip: UILabel!
+    @IBOutlet var anTotal3: UILabel!
+    @IBOutlet var anTotal1: UILabel!
+    @IBOutlet var anTotal2: UILabel!
+    @IBOutlet var anTotal4: UILabel!
+    
     //Getting the currentLocale, so we can format the currency
     var locale = NSLocale.currentLocale()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        anTip.text = currencyFormatter.stringFromNumber(0);
+        anTotal1.text = currencyFormatter.stringFromNumber(0);
+        anTotal2.text = currencyFormatter.stringFromNumber(0);
+        anTotal3.text = currencyFormatter.stringFromNumber(0);
+        anTotal4.text = currencyFormatter.stringFromNumber(0);
         
-        tipLabel.text = currencyFormatter.stringFromNumber(0);
-        totalLabel.text = currencyFormatter.stringFromNumber(0);
+        //Hide the animated view the main view is loaded
+        animatedView.hidden=true;
+        tipControl.hidden=true;
+        billField.selected=true;
+        billField.becomeFirstResponder();
         
-
+        
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,13 +64,35 @@ class ViewController: UIViewController {
     }
 
     @IBAction func onEditingChanged(sender: AnyObject) {
+
         var billAmount =  billField.text.bridgeToObjectiveC().doubleValue;
+        if(billAmount != 0) {
+            UIView.animateWithDuration(2.0, delay: 1.0, options: UIViewAnimationOptions.ShowHideTransitionViews ,
+                animations: {
+                    self.animatedView.hidden = false
+                    self.tipControl.hidden=false;
+                }, completion: { _ in  } );
+            
+        } else {
+
+            UIView.animateWithDuration(2.0, delay: 1.0, options: UIViewAnimationOptions.ShowHideTransitionViews ,
+                animations: {
+                    self.animatedView.hidden=true;
+                    self.tipControl.hidden=true;
+                }, completion: { _ in  } );
+        }
+        
         let tipPercentages = [0.18, 0.2, 0.22];
         var tipPercentage = tipPercentages[tipControl.selectedSegmentIndex];
         var tip =  billAmount*tipPercentage;
         var amount = billAmount+tip;
-        tipLabel.text = currencyFormatter.stringFromNumber(tip);
-        totalLabel.text = currencyFormatter.stringFromNumber(amount);
+        
+        //Animated Labels
+        anTip.text = currencyFormatter.stringFromNumber(tip);
+        anTotal1.text = currencyFormatter.stringFromNumber(amount);
+        anTotal2.text = currencyFormatter.stringFromNumber(amount/2);
+        anTotal3.text = currencyFormatter.stringFromNumber(amount/3);
+        anTotal4.text = currencyFormatter.stringFromNumber(amount/4);
 
         //Save the NSDate, we can remember the billAmount 1 min
         var curDate = NSDate();
@@ -66,6 +102,7 @@ class ViewController: UIViewController {
         //Save the lastChanged billAmount
         defaults.setObject(billAmount, forKey: "lastAmount");
         defaults.synchronize();
+        
     }
     @IBAction func onTap(sender: AnyObject) {
         view.endEditing(true);

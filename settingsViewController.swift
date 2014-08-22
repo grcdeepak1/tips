@@ -22,6 +22,7 @@ class settingsViewController: UIViewController {
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.backgroundColor = UIColor.lightGrayColor();
         //get the default values for tip percentage
         var defaults = NSUserDefaults.standardUserDefaults();
         var defTipPercentageIndex = defaults.integerForKey("defTipPercentageIndex");
