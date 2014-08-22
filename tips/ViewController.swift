@@ -15,13 +15,15 @@ class ViewController: UIViewController {
     @IBOutlet var billField: UITextField!
     @IBOutlet var tipLabel: UILabel!
     @IBOutlet var totalLabel: UILabel!
-    @NSCopying var locale: NSLocale?
+    //Getting the currentLocale, so we can format the currency
+    var locale = NSLocale.currentLocale()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        tipLabel.text = "$0.00";
-        totalLabel.text = "$0.00";
+        
+        tipLabel.text = currencyFormatter.stringFromNumber(0);
+        totalLabel.text = currencyFormatter.stringFromNumber(0);
         
 
     }
@@ -73,6 +75,7 @@ class ViewController: UIViewController {
     var currencyFormatter: NSNumberFormatter {
     let formatter = NSNumberFormatter()
         formatter.numberStyle = .CurrencyStyle
+        formatter.locale = locale
         return formatter
     }
 }
