@@ -38,11 +38,10 @@ class ViewController: UIViewController {
         tipControl.hidden=true;
         billField.selected=true;
         billField.becomeFirstResponder();
-        
-        
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        billField.frame = CGRect(x: 100,y: 200,width: 204,height: 82);
         //get the default values for tip percentage
         var defaults = NSUserDefaults.standardUserDefaults();
         var defTipPercentageIndex = defaults.integerForKey("defTipPercentageIndex");
@@ -56,7 +55,11 @@ class ViewController: UIViewController {
             var timeSince = curDate.timeIntervalSinceDate(pastDate);
             if let billAmount = possibleBillAmount as? Double {
                 if(timeSince < 60) {
-                    billField.text = billAmount.bridgeToObjectiveC().stringValue;
+                    if(billAmount != 0) {
+                        billField.text = String(format: "%.2f", billAmount);
+                    } else {
+                        billField.text = "";
+                    }
                     onEditingChanged(billField);
                 }
             }
@@ -64,22 +67,29 @@ class ViewController: UIViewController {
     }
 
     @IBAction func onEditingChanged(sender: AnyObject) {
-
-        var billAmount =  billField.text.bridgeToObjectiveC().doubleValue;
+        var billAmountString = NSString(string: billField.text);
+        var billAmount =  billAmountString.doubleValue;
         if(billAmount != 0) {
-            UIView.animateWithDuration(2.0, delay: 1.0, options: UIViewAnimationOptions.ShowHideTransitionViews ,
+            self.animatedView.hidden=false;
+            self.tipControl.hidden=false;
+            UIView.animateWithDuration(0.5, delay: 0.0,
+                options: UIViewAnimationOptions.TransitionFlipFromBottom,
                 animations: {
-                    self.animatedView.hidden = false
-                    self.tipControl.hidden=false;
+                    self.animatedView.alpha=1;
+                    self.tipControl.alpha=1;
+                    self.billField.frame = CGRect(x: 100,y: 80,width: 204,height: 82);
                 }, completion: { _ in  } );
             
         } else {
-
-            UIView.animateWithDuration(2.0, delay: 1.0, options: UIViewAnimationOptions.ShowHideTransitionViews ,
+            billField.frame = CGRect(x: 100,y: 200,width: 204,height: 82);
+            UIView.animateWithDuration(0.5, delay: 0.0,
+                options: UIViewAnimationOptions.TransitionFlipFromBottom ,
                 animations: {
-                    self.animatedView.hidden=true;
-                    self.tipControl.hidden=true;
+                    self.animatedView.alpha=0;
+                    self.tipControl.alpha=0;
                 }, completion: { _ in  } );
+            
+            self.tipControl.hidden=true;
         }
         
         let tipPercentages = [0.18, 0.2, 0.22];
