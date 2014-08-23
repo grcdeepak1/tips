@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     
     //Getting the currentLocale, so we can format the currency
     var locale = NSLocale.currentLocale()
+    var wasZero = true;
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,17 +80,24 @@ class ViewController: UIViewController {
                     self.tipControl.alpha=1;
                     self.billField.frame = CGRect(x: 100,y: 80,width: 204,height: 82);
                 }, completion: { _ in  } );
+            wasZero=true;
             
         } else {
-            billField.frame = CGRect(x: 100,y: 200,width: 204,height: 82);
+            if (self.wasZero != true) {
+                billField.frame = CGRect(x: 100,y: 80,width: 204,height: 82);
+            } else {
+                billField.frame = CGRect(x: 100,y: 200,width: 204,height: 82);
+            }
             UIView.animateWithDuration(0.5, delay: 0.0,
                 options: UIViewAnimationOptions.TransitionFlipFromBottom ,
                 animations: {
                     self.animatedView.alpha=0;
                     self.tipControl.alpha=0;
+                    self.billField.frame = CGRect(x: 100,y: 200,width: 204,height: 82);
                 }, completion: { _ in  } );
             
             self.tipControl.hidden=true;
+            wasZero=false;
         }
         
         let tipPercentages = [0.18, 0.2, 0.22];
